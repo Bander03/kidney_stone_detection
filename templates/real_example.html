@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🧠 Kidney Stone Detection – Demo</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- html2canvas for download -->
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+  <style>
+    /* neon-curve background */
+    .bg-curves {
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(16,185,129,0.15), transparent 40%),
+        radial-gradient(circle at 80% 50%, rgba(16,185,129,0.15), transparent 40%);
+    }
+  </style>
+</head>
+<body class="bg-gray-900 bg-curves text-white flex items-center justify-center min-h-screen p-4">
+
+  <div id="card" class="relative w-full max-w-lg rounded-3xl overflow-hidden p-8">
+    <!-- dark overlay -->
+    <div class="absolute inset-0 bg-black/60"></div>
+
+    <div class="relative z-10 flex flex-col items-center space-y-6">
+      <h1 class="text-2xl font-bold">🔍 Real Example: Upload & Predict</h1>
+
+      <!-- Upload + Preview -->
+      <input id="file-input" type="file" accept="image/*"
+             class="w-full text-sm text-gray-300
+                    file:py-2 file:px-4 file:bg-emerald-500 file:text-white
+                    file:rounded-lg hover:file:bg-emerald-600 transition"/>
+
+      <div id="preview"
+           class="w-full h-48 bg-gray-800 border-2 border-dashed border-emerald-700 rounded-lg
+                  flex items-center justify-center text-gray-500">
+        <span>Select an image to preview</span>
+      </div>
+
+      <button id="predict-btn"
+              class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2 rounded-lg font-semibold
+                     transition shadow-lg shadow-emerald-700/30">
+        Predict
+      </button>
+
+      <!-- Skeleton Loader -->
+      <div id="skeleton" class="w-full mt-4 space-y-4 hidden">
+        <div class="h-6 bg-gray-700 rounded animate-pulse"></div>
+        <div class="h-32 bg-gray-700 rounded animate-pulse"></div>
+      </div>
+
+      <!-- Result + tooltip -->
+      <div id="result-container" class="w-full flex items-center justify-center space-x-2 hidden">
+        <div id="result" class="px-4 py-2 rounded-lg font-medium"></div>
+        <div class="relative group">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               class="h-6 w-6 text-gray-400 hover:text-gray-200 cursor-pointer"
+               fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"/>
+          </svg>
+          <div id="tooltip"
+               class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 w-48
+                      bg-gray-800 text-sm text-gray-200 p-2 rounded-lg opacity-0
+                      group-hover:opacity-100 transition-opacity pointer-events-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- Bar chart container -->
+      <div id="chart-container" class="w-full hidden space-y-4 mt-4">
+        <!-- Stone bar -->
+        <div>
+          <div class="flex justify-between mb-1">
+            <span>Stone</span><span id="stone-rate-text"></span>
+          </div>
+          <div class="w-full bg-gray-800 h-4 rounded-full overflow-hidden">
+            <div id="stone-bar" class="h-4 bg-red-500" style="width:0%"></div>
+          </div>
+        </div>
+        <!-- Non-stone bar -->
+        <div>
+          <div class="flex justify-between mb-1">
+            <span>Non-stone</span><span id="nonstone-rate-text"></span>
+          </div>
+          <div class="w-full bg-gray-800 h-4 rounded-full overflow-hidden">
+            <div id="nonstone-bar" class="h-4 bg-green-500" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Download & Share -->
+      <div id="actions" class="w-full flex justify-between hidden">
+        <button id="download-btn"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
+          Download
+        </button>
+        <button id="share-btn"
+                class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition">
+          Share
+        </button>
+      </div>
+
+      <a href="/"
+         class="mt-4 text-sm underline text-emerald-300 hover:text-emerald-400 transition">
+        ← Back to Home
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const fileInput       = document.getElementById("file-input");
+    const preview         = document.getElementById("preview");
+    const predictBtn      = document.getElementById("predict-btn");
+    const skeleton        = document.getElementById("skeleton");
+    const resultCtr       = document.getElementById("result-container");
+    const resultBox       = document.getElementById("result");
+    const tooltip         = document.getElementById("tooltip");
+    const chartContainer  = document.getElementById("chart-container");
+    const stoneBar        = document.getElementById("stone-bar");
+    const nonstoneBar     = document.getElementById("nonstone-bar");
+    const stoneRateText   = document.getElementById("stone-rate-text");
+    const nonstoneRateText= document.getElementById("nonstone-rate-text");
+    const actions         = document.getElementById("actions");
+    const downloadBtn     = document.getElementById("download-btn");
+    const shareBtn        = document.getElementById("share-btn");
+
+    function hideAll() {
+      resultCtr.classList.add("hidden");
+      chartContainer.classList.add("hidden");
+      actions.classList.add("hidden");
+    }
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      preview.innerHTML = `<img src="${URL.createObjectURL(file)}" class="object-contain h-full w-full rounded-lg"/>`;
+      hideAll();
+    });
+
+    predictBtn.addEventListener("click", async () => {
+      if (!fileInput.files.length) return alert("Please select an image.");
+      skeleton.classList.remove("hidden");
+      hideAll();
+
+      const fd = new FormData();
+      fd.append("image", fileInput.files[0]);
+
+      try {
+        const res  = await fetch("/predict", { method: "POST", body: fd });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || "Prediction failed");
+
+        const p            = json.confidence;
+        const stonePct     = Math.round(p * 100);
+        const nonstonePct  = 100 - stonePct;
+        const isStone      = json.prediction === "Stone";
+
+        resultBox.textContent = `${json.prediction} (${stonePct}%)`;
+        resultBox.className   = `px-4 py-2 rounded-lg font-medium ${
+          isStone ? "bg-red-600/50 text-red-200" : "bg-green-600/50 text-green-200"
+        }`;
+        resultCtr.classList.remove("hidden");
+
+        tooltip.textContent = isStone
+          ? `Model confidence ${stonePct}% > 50% threshold`
+          : `Model confidence ${stonePct}% ≤ 50% threshold`;
+
+        stoneBar.style.width        = `${stonePct}%`;
+        nonstoneBar.style.width     = `${nonstonePct}%`;
+        stoneRateText.textContent   = `${stonePct}%`;
+        nonstoneRateText.textContent= `${nonstonePct}%`;
+        chartContainer.classList.remove("hidden");
+        actions.classList.remove("hidden");
+      } catch (err) {
+        resultBox.textContent = err.message;
+        resultBox.className   = "px-4 py-2 rounded-lg bg-red-700 text-red-200 font-medium";
+        resultCtr.classList.remove("hidden");
+      } finally {
+        skeleton.classList.add("hidden");
+      }
+    });
+
+    // High-res Download
+    downloadBtn.addEventListener("click", () => {
+      const card = document.getElementById("card");
+      const scale = window.devicePixelRatio * 2;
+      html2canvas(card, {
+        scale: scale,
+        useCORS: true,
+        backgroundColor: null
+      }).then(canvas => {
+        const a = document.createElement("a");
+        a.href = canvas.toDataURL("image/png");
+        a.download = "prediction_highres.png";
+        a.click();
+      });
+    });
+
+    // Share text
+    shareBtn.addEventListener("click", async () => {
+      const text = resultBox.textContent;
+      if (navigator.share) {
+        navigator.share({ title: "Kidney Stone Prediction", text });
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+        alert("Result copied to clipboard!");
+      } else {
+        alert("Share not supported.");
+      }
+    });
+  </script>
+</body>
+</html>

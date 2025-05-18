@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📄 Documentation – Kidney Stone Detection</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-curves {
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(16,185,129,0.15), transparent 40%),
+        radial-gradient(circle at 80% 50%, rgba(16,185,129,0.15), transparent 40%);
+    }
+  </style>
+</head>
+<body class="bg-gray-900 bg-curves text-white min-h-screen p-8">
+
+  <div class="max-w-5xl mx-auto space-y-12">
+    <!-- Title & Overview -->
+    <header class="text-center space-y-4">
+      <h1 class="text-5xl font-extrabold">🧠 Kidney Stone Detection</h1>
+      <p class="text-gray-300">
+        A sleek AI-powered web application for detecting kidney stones in CT images. Upload your scan, and our deep-learning model (custom CNN) will tell you “Stone” or “Non-stone” with confidence scores—complete with interactive visual feedback.
+      </p>
+    </header>
+
+    <!-- Features -->
+    <section class="space-y-2">
+      <h2 class="text-3xl font-bold text-emerald-400">✨ Features</h2>
+      <ul class="list-disc list-inside text-gray-200 space-y-1">
+        <li>🔍 Single-image upload & instant prediction</li>
+        <li>📊 Confidence visualization via interactive bar charts</li>
+        <li>🔄 Real-time feedback with skeleton loader</li>
+        <li>📥 High-resolution download of results</li>
+        <li>📤 Shareable results via Web Share API or clipboard</li>
+      </ul>
+    </section>
+
+    <!-- Technologies -->
+    <section class="space-y-2">
+      <h2 class="text-3xl font-bold text-emerald-400">🛠️ Technologies</h2>
+      <div class="flex flex-wrap gap-4">
+        <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">Python</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">Flask</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">PyTorch</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">Tailwind CSS</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">html2canvas</span>
+        <span class="px-3 py-1 bg-gray-800 rounded-full text-sm">Chart.js</span>
+      </div>
+    </section>
+
+    <!-- Preview -->
+    <section class="space-y-4">
+      <h2 class="text-3xl font-bold text-emerald-400">🖼️ Preview</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <img src="/static/img/preview-upload.png" alt="Upload UI" class="rounded-lg shadow-lg"/>
+        <img src="/static/img/preview-result.png" alt="Result UI" class="rounded-lg shadow-lg"/>
+      </div>
+    </section>
+
+    <!-- Project Structure -->
+    <section>
+      <h2 class="text-3xl font-bold text-emerald-400">📁 Project Structure</h2>
+      <pre class="bg-gray-800 text-green-200 p-4 rounded-lg text-sm overflow-auto">
+kidney_stone_detection/
+├── app.py
+├── model.py
+├── models/
+│   └── kidney_stone_cnn.pth
+├── requirements.txt
+├── templates/
+│   ├── index.html
+│   ├── real_example.html
+│   └── docs.html
+└── static/
+    └── img/
+        ├── preview-upload.png
+        └── preview-result.png
+      </pre>
+    </section>
+
+    <!-- Installation Guide -->
+    <section class="space-y-2">
+      <h2 class="text-3xl font-bold text-emerald-400">🚀 Installation Guide</h2>
+      <ol class="list-decimal list-inside text-gray-200 space-y-1">
+        <li>Clone the repo  
+          <code class="bg-gray-800 px-2 py-1 rounded">git clone https://github.com/yourusername/kidney_stone_detection.git</code>
+        </li>
+        <li>Install dependencies  
+          <code class="bg-gray-800 px-2 py-1 rounded">pip install -r requirements.txt</code>
+        </li>
+        <li>Run the server  
+          <code class="bg-gray-800 px-2 py-1 rounded">python app.py</code>
+        </li>
+        <li>Open in browser: <code class="bg-gray-800 px-2 py-1 rounded">http://127.0.0.1:5000</code></li>
+      </ol>
+    </section>
+
+    <!-- API Endpoints -->
+    <section class="space-y-2">
+      <h2 class="text-3xl font-bold text-emerald-400">🧪 API Endpoints</h2>
+      <table class="w-full text-left text-gray-200 text-sm">
+        <thead><tr><th class="pb-2">Method</th><th class="pb-2">Endpoint</th><th class="pb-2">Description</th></tr></thead>
+        <tbody>
+          <tr><td class="py-1">GET</td><td class="py-1"><code>/</code></td><td>Landing page</td></tr>
+          <tr><td class="py-1">GET</td><td class="py-1"><code>/docs</code></td><td>Project documentation</td></tr>
+          <tr><td class="py-1">GET</td><td class="py-1"><code>/real_example</code></td><td>Upload & predict UI</td></tr>
+          <tr><td class="py-1">POST</td><td class="py-1"><code>/predict</code></td><td>Accepts image & returns JSON result</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Developers & License -->
+    <section class="space-y-2 text-gray-200">
+      <h2 class="text-3xl font-bold text-emerald-400">👨‍💻 Developers</h2>
+      <ul class="list-disc list-inside">
+        <li><strong>Bander Sidiq</strong> – AI & Backend</li>
+        <li><strong>Nawzad Rasul</strong> – Frontend & UI/UX</li>
+      </ul>
+      <p>📄 Licensed under the MIT License.</p>
+    </section>
+
+    <!-- Back Home -->
+    <div class="text-center">
+      <a href="/" class="underline text-emerald-300 hover:text-emerald-400">← Back to Home</a>
+    </div>
+  </div>
+
+</body>
+</html>
