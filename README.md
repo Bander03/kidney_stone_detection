@@ -1,3 +1,4 @@
+````markdown
 # 🧠 Kidney Stone Detection
 
 A sleek AI-powered web application for detecting kidney stones in CT images.  
@@ -21,26 +22,31 @@ Upload your scan, and our CNN model will tell you **Stone** or **Non-stone** wit
    ```bash
    git clone https://github.com/Bander03/kidney_stone_detection.git
    cd kidney_stone_detection
-
+````
 
 2. **Install dependencies**
 
+   ```bash
    pip install -r requirements.txt
-
-
+   ```
 
 3. **Run the server**
 
+   ```bash
    python app.py
+   ```
 
+4. **Open in browser**
 
-4. **Open in browser** → http://127.0.0.1:5000
+   ```
+   http://127.0.0.1:5000
+   ```
 
+---
 
-   
+## 📁 Project Structure
 
-📁 Project Structure
-
+```text
 kidney_stone_detection/
 ├── app.py
 ├── model.py
@@ -55,10 +61,12 @@ kidney_stone_detection/
 │   └── img/
 │       ├── preview-upload.png
 │       └── preview-result.png
-└── README.md  
+└── README.md
+```
 
+---
 
-🧪 API Endpoints
+## 🧪 API Endpoints
 
 | Method | Endpoint        | Description                 |
 | ------ | --------------- | --------------------------- |
@@ -67,8 +75,14 @@ kidney_stone_detection/
 | GET    | `/real_example` | Upload & predict UI         |
 | POST   | `/predict`      | Receive image & return JSON |
 
+---
 
-👨‍💻 Developers
-Bander Sidiq – AI & Backend
+## 👨‍💻 Developers
 
-Nawzad Rasul – AI & Frontend
+* **Bander Sidiq** – AI & Backend
+* **Nawzad Rasul** – AI & Frontend
+
+📄 Licensed under the MIT License.
+
+```
+```
