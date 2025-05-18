@@ -5,6 +5,14 @@ A sleek AI-powered web application for detecting kidney stones in CT images.
 Upload your scan, and our CNN model will tell you **Stone** or **Non-stone** with confidence—complete with interactive visuals.
 
 
+## 🖼️ Preview
+
+<p float="left">
+  <img src="static/img/preview-upload.png" width="300" alt="Upload UI"/>
+  <img src="static/img/preview-result.png" width="300" alt="Result UI"/>
+</p>
+
+
 ## ✨ Features
 
 - 🔍 Single-image upload & instant prediction  
