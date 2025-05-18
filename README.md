@@ -21,7 +21,7 @@ Upload your scan, and our CNN model will tell you **Stone** or **Non-stone** wit
    ```bash
    git clone https://github.com/Bander03/kidney_stone_detection.git
    cd kidney_stone_detection
-````
+
 
 2. **Install dependencies**
 
