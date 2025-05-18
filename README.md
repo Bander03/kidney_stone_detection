@@ -1,10 +1,9 @@
-````markdown
+
 # 🧠 Kidney Stone Detection
 
 A sleek AI-powered web application for detecting kidney stones in CT images.  
 Upload your scan, and our CNN model will tell you **Stone** or **Non-stone** with confidence—complete with interactive visuals.
 
----
 
 ## ✨ Features
 
@@ -14,7 +13,7 @@ Upload your scan, and our CNN model will tell you **Stone** or **Non-stone** wit
 - 📥 High-res download of results  
 - 📤 Shareable result via Web Share API or clipboard  
 
----
+
 
 ## 🚀 Installation
 
@@ -82,7 +81,6 @@ kidney_stone_detection/
 * **Bander Sidiq** – AI & Backend
 * **Nawzad Rasul** – AI & Frontend
 
-📄 Licensed under the MIT License.
 
-```
-```
+
+
